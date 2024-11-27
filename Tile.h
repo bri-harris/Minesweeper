@@ -12,6 +12,9 @@ class Tile {
 
     vector<Tile*> _adjacentTiles;
 
+    Tile* prev;
+    Tile* next;
+
 public:
     Tile();
 

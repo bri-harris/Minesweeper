@@ -18,7 +18,7 @@ add_executable(Minesweeper main.cpp
         Worker.h
 )
 
-include_directories(/usr/local/include)
+include_directories(/opt/homebrew/include)
 
 find_package(SFML 2.6 COMPONENTS system window graphics network audio REQUIRED)
 include_directories(${SFML_INCLUDE_DIRS})
