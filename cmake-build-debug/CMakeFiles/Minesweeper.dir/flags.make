@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/clang++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -isystem /opt/homebrew/include
+CXX_INCLUDES = -I/opt/homebrew -isystem /opt/homebrew/include
 
 CXX_FLAGSarm64 =  -std=c++11 -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk -mmacosx-version-min=14.7 -fcolor-diagnostics
 
