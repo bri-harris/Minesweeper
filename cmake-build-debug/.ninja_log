@@ -1,0 +1,13 @@
+# ninja log v6
+25	2764	1732244088687558584	CMakeFiles/Minesweeper.dir/Window.cpp.o	429def98b1d0bab4
+23	2284	1732241937612639898	CMakeFiles/Minesweeper.dir/Tile.cpp.o	3a0ed31448527c57
+30	2993	1732244359382400450	CMakeFiles/Minesweeper.dir/Board.cpp.o	c131c63c487dd3e8
+31	2602	1732244359383012627	CMakeFiles/Minesweeper.dir/Worker.cpp.o	1fd5dd6e1ab7c0e5
+28	2445	1732240016106328061	CMakeFiles/Minesweeper.dir/Random.cpp.o	fad2c449538e795d
+2993	3154	1732244362344837284	Minesweeper	8e58d1189bd6a9db
+14	2642	1732244359380914742	CMakeFiles/Minesweeper.dir/main.cpp.o	6f8975a4c769991e
+29	2796	1732240016107175792	CMakeFiles/Minesweeper.dir/TextureManager.cpp.o	909cfa75b7427647
+15	2790	1732244383658724826	CMakeFiles/Minesweeper.dir/Window.cpp.o	429def98b1d0bab4
+2791	2944	1732244386434505904	Minesweeper	8e58d1189bd6a9db
+14	2849	1732244454409409982	CMakeFiles/Minesweeper.dir/main.cpp.o	6f8975a4c769991e
+2849	2999	1732244457244399571	Minesweeper	8e58d1189bd6a9db
