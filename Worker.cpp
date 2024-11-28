@@ -23,6 +23,82 @@ namespace Worker {
         return mines;
     }
 
+    void SetNieghtbors(vector<vector<Tile>> &tileBoard) {
+        int rows = tileBoard.size();
+        int columns = tileBoard[0].size();
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < columns; y++) {
+
+                if (x == 0) {
+                    if (y == 0) {
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y+1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y+1]);
+                    }
+                    else if (y == columns-1) {
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y-1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y-1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y]);
+                    }
+                    else{
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y-1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y+1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y-1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y+1]);
+                    }
+                }
+
+                else if (x == rows -1) {
+                    if (y == 0) {
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y+1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y+1]);
+                    }
+                    else if (y == columns-1) {
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y-1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y-1]);
+                    }
+                    else {
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y-1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y+1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y-1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y+1]);
+                    }
+                }
+
+                else if (y == 0) {
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y+1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y+1]);
+                        tileBoard[x][y].SetAdjacent(&tileBoard[x][y+1]);
+                }
+
+                else if (y == columns-1) {
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y-1]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x][y-1]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y-1]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y]);
+                }
+
+                else {
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x][y-1]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x][y+1]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y-1]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y+1]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y-1]);
+                    tileBoard[x][y].SetAdjacent(&tileBoard[x+1][y+1]);
+                }
+            }
+        }
+    }
+
     vector<vector<char>> ReadInTestLayout(string testPath) {
         ifstream testFile(testPath);
         vector<vector<char>> cfgLayout(0);
@@ -64,6 +140,7 @@ namespace Worker {
                 rWindow.draw(tileLayout[i][j].GetTileSprite());
 
                 if (tileLayout[i][j].HasMine()) rWindow.draw(tileLayout[i][j].GetMineSprite());
+                if (tileLayout[i][j].HasNumber()) rWindow.draw(tileLayout[i][j].GetNumberSprite());
 
                 if (tileLayout[i][j].isFlagged() && !tileLayout[i][j].isRevealed()) {
                     rWindow.draw(tileLayout[i][j].GetFlagSprite());

@@ -5,7 +5,7 @@
 using std::vector;
 
 class Tile {
-    sf::Sprite _hidden, _revealed, _mine, _flag;
+    sf::Sprite _hidden, _revealed, _mine, _flag, _number;
     bool _isRevealed= false;
     bool _hasMine= false;
     bool _isFlagged = false;
@@ -21,8 +21,12 @@ public:
     sf::Sprite& GetFlagSprite();
     void SetMine();
 
+    void SetAdjacent(Tile* tile);
+
+    sf::Sprite& GetNumberSprite();
     void SetNumber(int number);
 
+    bool HasNumber();
     bool HasMine();
     bool isRevealed();
     bool isFlagged();

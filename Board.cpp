@@ -77,7 +77,7 @@ void Board::SetNumbers() {
             int nearMines = CountNearMines(x,y);
             if (nearMines>0 && _layoutPlan[x][y] == ' ') {
                 _layoutPlan[x][y] = '0' + nearMines;
-                // _board[x][y].SetNumber(nearMines);
+                _board[x][y].SetNumber(nearMines);
             }
         }
     }
@@ -98,7 +98,7 @@ void Board::PlantRandMines(unsigned int mineNumber) {
         }
     }
     SetNumbers();
-    PrintLayoutPlan();
+    SetNieghtbors(_board);
 }
 void Board::PlantMines() {
     for (unsigned int x = 0; x < _rows; x++) {
@@ -110,13 +110,16 @@ void Board::PlantMines() {
         }
     }
     SetNumbers();
-    PrintLayoutPlan();
+    SetNieghtbors(_board);
 }
 
 void Board::LeftMousePress(int x, int y) {
     for (unsigned int i = 0; i < _rows; i++) {
         for (int j = 0; j < _columns; j++)
             if (_board[i][j].Contains(x, y)) {
+                if (_board[i][j].HasMine()) {
+
+                }
                 _board[i][j].Reveal();
                 break;
             }
@@ -124,7 +127,7 @@ void Board::LeftMousePress(int x, int y) {
 }
 bool Board::RightMousePress(int x, int y) {
     for (unsigned int i = 0; i < _rows; i++) {
-        for (int j = 0; j < _columns; j++)
+        for (int j = 0; j < _columns; j++){
             if (_board[i][j].ContainsFlag(x, y)) {
                 _board[i][j].Flag();
                 _board[i][j].GetFlagSprite();
@@ -137,12 +140,13 @@ bool Board::RightMousePress(int x, int y) {
                     _flagsLaid-=1;
                     _flagsAllowed+=1;
                 }
-                // cout<<"Flags Laid: " << _flagsLaid << endl;
-                // cout<<"Flags Allowed: " << _flagsAllowed << endl;
+                cout<<"Flags Laid: " << _flagsLaid << endl;
+                cout<<"Flags Allowed: " << _flagsAllowed << endl;
                 return true;
                 break;
             }
     }
+}
 }
 
 

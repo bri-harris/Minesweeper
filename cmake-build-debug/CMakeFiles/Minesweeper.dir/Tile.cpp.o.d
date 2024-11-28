@@ -1034,4 +1034,6 @@ CMakeFiles/Minesweeper.dir/Tile.cpp.o: \
   /opt/homebrew/include/SFML/Graphics/Sprite.hpp \
   /opt/homebrew/include/SFML/Graphics/Text.hpp \
   /opt/homebrew/include/SFML/Graphics/VertexBuffer.hpp \
-  /Users/bharri503@cable.comcast.com/Project_Minesweeper/Minesweeper/TextureManager.h
+  /Users/bharri503@cable.comcast.com/Project_Minesweeper/Minesweeper/TextureManager.h \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk/usr/include/c++/v1/iostream \
+  /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk/usr/include/c++/v1/istream
