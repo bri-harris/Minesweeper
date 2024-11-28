@@ -9,7 +9,7 @@ namespace Worker {
     Window CreateWindowFromBoard(Board& board);
     unsigned int GetMineNumFromConfig(string cfgFile);
 
-    vector<vector<int>> ReadInTestLayout(string testFile);
+    vector<vector<char>> ReadInTestLayout(string testFile);
     void SetupTestBoard(Board& board, string testPath);
 
     void BuildBoard(Board& board,sf::RenderWindow& rWindow);

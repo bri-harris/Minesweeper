@@ -23,19 +23,22 @@ namespace Worker {
         return mines;
     }
 
-    vector<vector<int>> ReadInTestLayout(string testPath) {
+    vector<vector<char>> ReadInTestLayout(string testPath) {
         ifstream testFile(testPath);
-        vector<vector<int>> cfgLayout(0);
+        vector<vector<char>> cfgLayout(0);
 
         string line;
 
         while(getline(testFile,line)){
-            vector<int> rows(0);
+            vector<char> rows(0);
 
             while(line.size()>0){
+                char c;
                 int temp = stoi(line.substr(0,1));
+                if (temp==0) c = ' ';
+                else if (temp==1) c = 'x';
                 line = line.substr(1,line.size() -1);
-                rows.push_back(temp);
+                rows.push_back(c);
             }
 
             cfgLayout.push_back(rows);
@@ -46,7 +49,7 @@ namespace Worker {
     void SetupTestBoard(Board& board, string testPath) {
         board.ResetBoard();
 
-        vector<vector<int>> newLayout = ReadInTestLayout(testPath);
+        vector<vector<char>> newLayout = ReadInTestLayout(testPath);
         board.SetTileLayout(newLayout);
 
         board.PlantMines();

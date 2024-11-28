@@ -37,12 +37,51 @@ void Board::ResetBoard() {
 void Board::SeedVectorDefaults() {
     for (unsigned int i = 0; i < _rows; i++) {
         for (int j = 0; j < _columns; j++) {
-            _layoutPlan[i][j] = 0;
+            _layoutPlan[i][j] = ' ';
             _board[i][j] = Tile();
         }
     }
 }
 
+bool Board::IsMine(int x, int y) {
+    if (x<0) return false;
+    if (y<0) return false;
+    if (x >= _rows) return false;
+    if (y >= _columns) return false;
+
+    if (_layoutPlan[x][y] == 'x') return true;
+    return false;
+}
+int Board::CountNearMines(int x, int y) {
+    int mines = 0;
+
+    //previous row
+    if (IsMine(x-1,y-1)) mines++;
+    if (IsMine(x-1,y)) mines++;
+    if (IsMine(x-1,y+1)) mines++;
+
+    //same row
+    if (IsMine(x,y-1)) mines++;
+    if (IsMine(x,y+1)) mines++;
+
+    //next row
+    if (IsMine(x+1,y-1)) mines++;
+    if (IsMine(x+1,y)) mines++;
+    if (IsMine(x+1,y+1)) mines++;
+
+    return mines;
+}
+void Board::SetNumbers() {
+    for (int x = 0; x < _rows; x++) {
+        for (int y = 0; y < _columns; y++) {
+            int nearMines = CountNearMines(x,y);
+            if (nearMines>0 && _layoutPlan[x][y] == ' ') {
+                _layoutPlan[x][y] = '0' + nearMines;
+                // _board[x][y].SetNumber(nearMines);
+            }
+        }
+    }
+}
 
 void Board::PlantRandMines(unsigned int mineNumber) {
     int m = 0;
@@ -52,22 +91,26 @@ void Board::PlantRandMines(unsigned int mineNumber) {
         int x = Random::Int(0,_rows -1);
         int y = Random::Int(0, _columns -1);
 
-        if (_layoutPlan[x][y] == 0) {
-            _layoutPlan[x][y] = 1;
+        if (_layoutPlan[x][y] == ' ') {
+            _layoutPlan[x][y] = 'x';
             _board[x][y].SetMine();
             m++;
         }
     }
+    SetNumbers();
+    PrintLayoutPlan();
 }
 void Board::PlantMines() {
     for (unsigned int x = 0; x < _rows; x++) {
         for (int y = 0;y < _columns;y++) {
-            if (_layoutPlan[x][y] == 1) {
+            if (_layoutPlan[x][y] == 'x') {
                 _mines +=1;
                 _board[x][y].SetMine();
             }
         }
     }
+    SetNumbers();
+    PrintLayoutPlan();
 }
 
 void Board::LeftMousePress(int x, int y) {
@@ -103,7 +146,7 @@ bool Board::RightMousePress(int x, int y) {
 }
 
 
-vector<vector<int>>& Board::GetLayout() {
+vector<vector<char>>& Board::GetLayout() {
     return _layoutPlan;
 }
 vector<vector<Tile>>& Board::GetTileLayout() {
@@ -117,7 +160,7 @@ bool Board::IsDebugOn() {
     return _debugStatus;
 }
 
-void Board::SetTileLayout(vector<vector<int>>& layoutSet) {
+void Board::SetTileLayout(vector<vector<char>>& layoutSet) {
     _mines = 0;
     _layoutPlan = layoutSet;
 }

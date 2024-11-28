@@ -12,6 +12,10 @@ void Tile::SetMine() {
     _mine.setTexture(TextureManager::GetTexture("mine"));
 }
 
+void Tile::SetNumber(int number) {
+
+}
+
 sf::Sprite& Tile::GetTileSprite() {
         if (_isRevealed)
             return _revealed;

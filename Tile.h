@@ -9,6 +9,7 @@ class Tile {
     bool _isRevealed= false;
     bool _hasMine= false;
     bool _isFlagged = false;
+    bool _hasNumber = false;
 
     vector<Tile*> _adjacentTiles;
 
@@ -19,6 +20,8 @@ public:
     sf::Sprite& GetMineSprite();
     sf::Sprite& GetFlagSprite();
     void SetMine();
+
+    void SetNumber(int number);
 
     bool HasMine();
     bool isRevealed();
