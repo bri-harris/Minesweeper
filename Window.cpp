@@ -6,9 +6,6 @@ Window::Window(Board& board): _board(board) {
     _height = board.GetRows() * 32 + 100;
     _width = board.GetColumns() * 32;
 
-    _digitsX = 18;
-    _digitsY = board.GetRows() * 32;
-
     _smileX = _width / 2 - 32;
     _smileY = board.GetRows() * 32;
 
@@ -21,27 +18,8 @@ Window::Window(Board& board): _board(board) {
     _test2.setTexture(TextureManager::GetTexture("test_2"));
     _test3.setTexture(TextureManager::GetTexture("test_3"));
 
-    _tensDigit.setTexture(TextureManager::GetTexture("digits"));
-    _onesDigit.setTexture(TextureManager::GetTexture("digits"));
-
 }
 
-void Window::SetDigits(Board& board, float x, float y) {
-    int flagsAllowed = board.GetFlagsAllowed();
-    int tensPlace = flagsAllowed / 10;
-    int onesPlace = flagsAllowed % 10;
-    // cout << "Tens Place: " << tensPlace << endl;
-    // cout << "Ones Place: " << onesPlace << endl;
-
-
-    _tensDigit.setTextureRect(sf::IntRect(tensPlace*21, 0, 21, 32));
-    _tensDigit.setPosition(x,y);
-
-    _onesDigit.setTextureRect(sf::IntRect(onesPlace*21, 0, 21, 32));
-    _onesDigit.setPosition(x+21,y);
-
-
-}
 void Window::SetPosition(float x, float y) {
     _happy.setPosition(x, y);
 
@@ -57,11 +35,4 @@ void Window::SetPosition(float x, float y) {
     x+=2*32;
     _test3.setPosition(x, y);
 }
-
-
-
-
-
-
-
 

@@ -17,7 +17,6 @@ void Tile::SetMine() {
 void Tile::SetAdjacent(Tile *tile) {
     _adjacentTiles.push_back(tile);
 }
-
 void Tile::SetNumber(int number) {
     _hasNumber = true;
     string numSprite = "number_" + std::to_string(number);

@@ -11,10 +11,19 @@ Board::Board(unsigned int columns, unsigned int rows, unsigned int mines) {
     _mines = mines;
     _flagsAllowed = mines;
 
+    _digitsX = 18;
+    _digitsY = _rows * 32;
+
+    _hundredsDigit.setTexture(TextureManager::GetTexture("digits"));
+    _tensDigit.setTexture(TextureManager::GetTexture("digits"));
+    _onesDigit.setTexture(TextureManager::GetTexture("digits"));
+
     ResizeVectors();
     ResetBoard();
     PlantRandMines(mines);
 }
+
+
 void Board::ResizeVectors() {
     _layoutPlan.resize(_rows);
     _board.resize(_rows);
@@ -32,6 +41,7 @@ void Board::ResizeTileVector() {
 void Board::ResetBoard() {
     if (_debugStatus) SetDebugStatus();
     _mines = 0;
+    _flagsAllowed = 0;
     SeedVectorDefaults();
 }
 void Board::SeedVectorDefaults() {
@@ -41,6 +51,38 @@ void Board::SeedVectorDefaults() {
             _board[i][j] = Tile();
         }
     }
+}
+void Board::PlantRandMines(unsigned int mineNumber) {
+    int m = 0;
+    _mines = mineNumber;
+    _flagsAllowed = mineNumber;
+
+    while(m < mineNumber) {
+        int x = Random::Int(0,_rows -1);
+        int y = Random::Int(0, _columns -1);
+
+        if (_layoutPlan[x][y] == ' ') {
+            _layoutPlan[x][y] = 'x';
+            _board[x][y].SetMine();
+            m++;
+        }
+    }
+    SetNumbers();
+
+    SetNieghtbors(_board);
+}
+void Board::PlantMines() {
+    for (unsigned int x = 0; x < _rows; x++) {
+        for (int y = 0;y < _columns;y++) {
+            if (_layoutPlan[x][y] == 'x') {
+                _mines +=1;
+                _board[x][y].SetMine();
+            }
+        }
+    }
+    _flagsAllowed = _mines;
+    SetNumbers();
+    SetNieghtbors(_board);
 }
 
 bool Board::IsMine(int x, int y) {
@@ -83,42 +125,24 @@ void Board::SetNumbers() {
     }
 }
 
-void Board::PlantRandMines(unsigned int mineNumber) {
-    int m = 0;
-    _mines = mineNumber;
-
-    while(m < mineNumber) {
-        int x = Random::Int(0,_rows -1);
-        int y = Random::Int(0, _columns -1);
-
-        if (_layoutPlan[x][y] == ' ') {
-            _layoutPlan[x][y] = 'x';
-            _board[x][y].SetMine();
-            m++;
-        }
-    }
-    SetNumbers();
-    SetNieghtbors(_board);
-}
-void Board::PlantMines() {
+void Board::RevealMines() {
     for (unsigned int x = 0; x < _rows; x++) {
-        for (int y = 0;y < _columns;y++) {
-            if (_layoutPlan[x][y] == 'x') {
-                _mines +=1;
-                _board[x][y].SetMine();
+        for (int y = 0; y < _columns; y++) {
+            if (_board[x][y].HasMine()) {
+                _board[x][y].Reveal();
             }
         }
     }
-    SetNumbers();
-    SetNieghtbors(_board);
 }
-
 void Board::LeftMousePress(int x, int y) {
     for (unsigned int i = 0; i < _rows; i++) {
         for (int j = 0; j < _columns; j++)
             if (_board[i][j].Contains(x, y)) {
                 if (_board[i][j].HasMine()) {
-
+                    // window._hasLost = true;
+                    for (unsigned int k = 0; k < _mines; k++) {
+                        RevealMines();
+                    }
                 }
                 _board[i][j].Reveal();
                 break;
@@ -132,15 +156,12 @@ bool Board::RightMousePress(int x, int y) {
                 _board[i][j].Flag();
                 _board[i][j].GetFlagSprite();
 
-                if (_board[i][j].isFlagged()) {
-                    _flagsLaid+=1;
+                if (_board[i][j].isFlagged()&& !_board[i][j].isRevealed()) {
                     _flagsAllowed -=1;
                 }
-                else if (!_board[i][j].isFlagged()) {
-                    _flagsLaid-=1;
+                else if (!_board[i][j].isFlagged()&& !_board[i][j].isRevealed()) {
                     _flagsAllowed+=1;
                 }
-                cout<<"Flags Laid: " << _flagsLaid << endl;
                 cout<<"Flags Allowed: " << _flagsAllowed << endl;
                 return true;
                 break;
@@ -150,24 +171,76 @@ bool Board::RightMousePress(int x, int y) {
 }
 
 
+void Board::SetDebugStatus() {
+    _debugStatus = !_debugStatus;
+}
+void Board::SetTileLayout(vector<vector<char>>& layoutSet) {
+    _mines = 0;
+    _layoutPlan = layoutSet;
+}
+void Board::SetDigits(float x, float y) {
+    int hundredsPlace = _flagsAllowed / 100;
+    int tensPlace = _flagsAllowed / 10;
+    int onesPlace = _flagsAllowed % 10;
+    if (_flagsAllowed < 0 && _flagsAllowed > -10) {
+        onesPlace = _flagsAllowed * -1;
+    }else if (_flagsAllowed <=-10) {
+        tensPlace = -_flagsAllowed / 10;
+        onesPlace = -_flagsAllowed % 10;
+    }
+
+    if (hundredsPlace> 0) {
+        _hundredsDigit.setTextureRect(sf::IntRect(hundredsPlace*21, 0, 21, 32));
+        tensPlace = hundredsPlace / 10;
+    }else if (_flagsAllowed < 0) {
+        _hundredsDigit.setTextureRect(sf::IntRect(10*21, 0, 21, 32));
+    }else {
+        _hundredsDigit.setTextureRect(sf::IntRect(0*21, 0, 21, 32));
+    }
+
+    // cout << "Hundreds Place: " << hundredsPlace << endl;
+    // cout << "Tens Place: " << tensPlace << endl;
+    // cout << "Ones Place: " << onesPlace << endl;
+    // cout << "Flags Allowed: " << _flagsAllowed << endl;
+    // cout << "Mines: " << _mines << endl;
+
+    _hundredsDigit.setPosition(x,y);
+
+    _tensDigit.setTextureRect(sf::IntRect(tensPlace*21, 0, 21, 32));
+    _tensDigit.setPosition(x+21,y);
+
+    _onesDigit.setTextureRect(sf::IntRect(onesPlace*21, 0, 21, 32));
+    _onesDigit.setPosition(x+42,y);
+}
+
 vector<vector<char>>& Board::GetLayout() {
     return _layoutPlan;
 }
 vector<vector<Tile>>& Board::GetTileLayout() {
     return _board;
 }
-
-void Board::SetDebugStatus() {
-    _debugStatus = !_debugStatus;
+vector<vector<Tile>> & Board::GetTileBoard() {
+    return _board;
 }
-bool Board::IsDebugOn() {
+unsigned int Board::GetMines() {
+    return _mines;
+}
+unsigned int Board::GetRows() {
+    return _rows;
+}
+unsigned int Board::GetColumns() {
+    return _columns;
+}
+// unsigned int Board::GetFlagsLaid() {
+//     return _flagsLaid;
+// }
+int Board::GetFlagsAllowed() {
+    return _flagsAllowed;
+}
+bool Board::GetDebugStatus() {
     return _debugStatus;
 }
 
-void Board::SetTileLayout(vector<vector<char>>& layoutSet) {
-    _mines = 0;
-    _layoutPlan = layoutSet;
-}
 void Board::PrintLayoutPlan() {
     for (int i = 0; i < _rows; i++) {
         cout << "[ ";
@@ -177,16 +250,3 @@ void Board::PrintLayoutPlan() {
         cout << " ]\n";
     }
 }
-unsigned int Board::GetRows() {
-    return _rows;
-}
-unsigned int Board::GetColumns() {
-    return _columns;
-}
-unsigned int Board::GetFlagsLaid() {
-    return _flagsLaid;
-}
-int Board::GetFlagsAllowed() {
-    return _flagsAllowed;
-}
-

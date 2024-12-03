@@ -1,4 +1,5 @@
 #include "Worker.h"
+#include "Window.h"
 #include <iostream>
 
 namespace Worker {
@@ -149,8 +150,8 @@ namespace Worker {
         }
 
     }
+
     void DrawMenu(Window& window, sf::RenderWindow& rWindow) {
-        DrawDigits(window,rWindow);
         window.SetPosition(window._smileX,window._smileY);
         rWindow.draw(window._happy);
         rWindow.draw(window._debug);
@@ -158,12 +159,12 @@ namespace Worker {
         rWindow.draw(window._test2);
         rWindow.draw(window._test3);
     }
-    void DrawDigits(Window& window, sf::RenderWindow& rWindow) {
-        window.SetDigits(window._board, window._digitsX,window._digitsY);
-        rWindow.draw(window._tensDigit);
-        rWindow.draw(window._onesDigit);
+    void DrawDigits(Board& board, sf::RenderWindow& rWindow) {
+        board.SetDigits(board._digitsX,board._digitsY);
+        rWindow.draw(board._hundredsDigit);
+        rWindow.draw(board._tensDigit);
+        rWindow.draw(board._onesDigit);
     }
-
 
     void DebugToggle(vector<vector<Tile>>& tileLayout, sf::RenderWindow& rWindow) {
         sf::Sprite mine(TextureManager::GetTexture("mine"));

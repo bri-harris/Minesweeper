@@ -4,6 +4,7 @@
 #include "Random.h"
 #include "Board.h"
 #include "Worker.h"
+#include "Window.h"
 using namespace Worker;
 using namespace std;
 
@@ -48,19 +49,23 @@ int main() {
                     board.LeftMousePress(x, y);
                 }
                 else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-                    if(board.RightMousePress(x, y)) {
-                        DrawDigits(gameWindow,window);
-                        cout << board.GetFlagsAllowed();
-                    }
+                    board.RightMousePress(x, y);
+                    // if(board.RightMousePress(x, y)) {
+                    //     DrawDigits(board,window);
+                    //     // cout << board.GetFlagsAllowed();
+                    // }
+
 
                 }
 
             }
         }
-
         window.clear();
+
         BuildBoard(board,window);
-        if (board.IsDebugOn()) {
+        DrawDigits(board,window);
+
+        if (board.GetDebugStatus()) {
             DebugToggle(board.GetTileLayout(),window);
         }
         DrawMenu(gameWindow,window);
