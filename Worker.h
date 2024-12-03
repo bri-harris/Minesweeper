@@ -17,7 +17,9 @@ namespace Worker {
     void BuildBoard(Board& board,sf::RenderWindow& rWindow);
 
     void DrawMenu(Window& window, sf::RenderWindow& rWindow);
-    // void DrawDigits(Window& window, sf::RenderWindow& rWindow);
+    void DrawWon(Window& window, sf::RenderWindow& rWindow);
+    void DrawLost(Window& window, sf::RenderWindow& rWindow);
+
     void DebugToggle(vector<vector<Tile>>& tileLayout , sf::RenderWindow& rWindow);
 
     void BuildBoard(Window& gWindow,sf::RenderWindow& rWindow);

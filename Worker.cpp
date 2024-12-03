@@ -145,6 +145,10 @@ namespace Worker {
 
                 if (tileLayout[i][j].isFlagged() && !tileLayout[i][j].isRevealed()) {
                     rWindow.draw(tileLayout[i][j].GetFlagSprite());
+                }else if (tileLayout[i][j].isFlagged()&& tileLayout[i][j].isRevealed()) {
+                    rWindow.draw(tileLayout[i][j].GetTileSprite());
+                    rWindow.draw(tileLayout[i][j].GetFlagSprite());
+                    rWindow.draw(tileLayout[i][j].GetMineSprite());
                 }
             }
         }
@@ -159,6 +163,13 @@ namespace Worker {
         rWindow.draw(window._test2);
         rWindow.draw(window._test3);
     }
+    void DrawWon(Window& window, sf::RenderWindow& rWindow) {
+        rWindow.draw(window._win);
+    }
+    void DrawLost(Window& window, sf::RenderWindow& rWindow) {
+        rWindow.draw(window._lose);
+    }
+
     void DrawDigits(Board& board, sf::RenderWindow& rWindow) {
         board.SetDigits(board._digitsX,board._digitsY);
         rWindow.draw(board._hundredsDigit);

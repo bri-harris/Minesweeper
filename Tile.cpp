@@ -74,7 +74,7 @@ void Tile::Flag() {
     _isFlagged = !_isFlagged;
 }
 void Tile::Reveal() {
-    if(!_isRevealed && !_isFlagged) _isRevealed = true;;
+    if(!_isRevealed && !_isFlagged) _isRevealed = true;
 }
 
 

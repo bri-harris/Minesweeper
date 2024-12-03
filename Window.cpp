@@ -35,4 +35,3 @@ void Window::SetPosition(float x, float y) {
     x+=2*32;
     _test3.setPosition(x, y);
 }
-

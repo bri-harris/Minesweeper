@@ -23,7 +23,6 @@ Board::Board(unsigned int columns, unsigned int rows, unsigned int mines) {
     PlantRandMines(mines);
 }
 
-
 void Board::ResizeVectors() {
     _layoutPlan.resize(_rows);
     _board.resize(_rows);
@@ -39,6 +38,7 @@ void Board::ResizeTileVector() {
     }
 }
 void Board::ResetBoard() {
+    _hasLost = false;
     if (_debugStatus) SetDebugStatus();
     _mines = 0;
     _flagsAllowed = 0;
@@ -135,23 +135,37 @@ void Board::RevealMines() {
     }
 }
 void Board::LeftMousePress(int x, int y) {
+
     for (unsigned int i = 0; i < _rows; i++) {
-        for (int j = 0; j < _columns; j++)
+        for (int j = 0; j < _columns; j++){
             if (_board[i][j].Contains(x, y)) {
+                if (_hasLost) break;
+                else if (_hasWon) break;
+
                 if (_board[i][j].HasMine()) {
-                    // window._hasLost = true;
+                    _hasLost = true;
+                    _board[i][j].Reveal();
+                    SetDebugStatus();
+
                     for (unsigned int k = 0; k < _mines; k++) {
+
                         RevealMines();
                     }
                 }
+                // else if (!_board[i][j].HasNumber()) {
+                //
+                // }
+
                 _board[i][j].Reveal();
                 break;
             }
+    }
     }
 }
 bool Board::RightMousePress(int x, int y) {
     for (unsigned int i = 0; i < _rows; i++) {
         for (int j = 0; j < _columns; j++){
+            if (_hasLost || _hasWon)break;
             if (_board[i][j].ContainsFlag(x, y)) {
                 _board[i][j].Flag();
                 _board[i][j].GetFlagSprite();
@@ -231,14 +245,19 @@ unsigned int Board::GetRows() {
 unsigned int Board::GetColumns() {
     return _columns;
 }
-// unsigned int Board::GetFlagsLaid() {
-//     return _flagsLaid;
-// }
 int Board::GetFlagsAllowed() {
     return _flagsAllowed;
 }
 bool Board::GetDebugStatus() {
     return _debugStatus;
+}
+
+bool Board::HasLost() {
+    return _hasLost;
+}
+
+bool Board::HasWon() {
+    return _hasWon;
 }
 
 void Board::PrintLayoutPlan() {

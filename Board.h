@@ -11,6 +11,10 @@ class Board {
     bool _debugStatus = false;
     int _flagsAllowed;
 
+    bool _hasLost = false;
+    bool _hasWon = false;
+
+
 
 public:
     unsigned int _digitsX, _digitsY;
@@ -18,40 +22,36 @@ public:
 
     Board(unsigned int columns,  unsigned int rows, unsigned int mines);
 
-    void SetDigits(float x, float y);
-
     void ResizeVectors();
     void ResizeTileVector();
     void ResetBoard();
     void SeedVectorDefaults();
+    void PlantRandMines(unsigned int mineNumber);
+    void PlantMines();
 
     bool IsMine(int x, int y);
     int CountNearMines(int x, int y);
     void SetNumbers();
 
-    void PlantRandMines(unsigned int mineNumber);
-    void PlantMines();
-
     void RevealMines();
-
     void LeftMousePress(int x, int y);
     bool RightMousePress(int x, int y);
 
+    void SetDebugStatus();
+    void SetTileLayout(vector<vector<char>>& layoutSet);
+    void SetDigits(float x, float y);
+
     vector<vector<char>>& GetLayout();
     vector<vector<Tile>>& GetTileLayout();
-
-    void SetDebugStatus();
-    bool GetDebugStatus();
-
-    void SetTileLayout(vector<vector<char>>& layoutSet);
-    void PrintLayoutPlan();
-
     vector<vector<Tile>>& GetTileBoard();
     unsigned int GetMines();
     unsigned int GetRows();
     unsigned int GetColumns();
-    // unsigned int GetFlagsLaid();
     int GetFlagsAllowed();
+    bool GetDebugStatus();
+    bool HasLost();
+    bool HasWon();
 
+    void PrintLayoutPlan();
 };
 

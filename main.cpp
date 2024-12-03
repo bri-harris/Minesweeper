@@ -41,7 +41,7 @@ int main() {
                     SetupTestBoard(board,"./boards/testboard3.brd");
                 }
                 if (gameWindow._debug.getGlobalBounds().contains(x, y)){
-                    // cout << "Debug Position: (" << x << ", " <<y << ")" << endl;
+                    if (board.HasLost() || board.HasWon()) break;
                     board.SetDebugStatus();
                 }
 
@@ -50,12 +50,6 @@ int main() {
                 }
                 else if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
                     board.RightMousePress(x, y);
-                    // if(board.RightMousePress(x, y)) {
-                    //     DrawDigits(board,window);
-                    //     // cout << board.GetFlagsAllowed();
-                    // }
-
-
                 }
 
             }
@@ -69,6 +63,12 @@ int main() {
             DebugToggle(board.GetTileLayout(),window);
         }
         DrawMenu(gameWindow,window);
+        if (board.HasWon()) {
+            DrawWon(gameWindow,window);
+        }
+        else if (board.HasLost()) {
+            DrawLost(gameWindow,window);
+        }
         window.display();
     }
     return 0;
