@@ -61,9 +61,9 @@ void Board::PlantRandMines(unsigned int mineNumber) {
     _mines = mineNumber;
     _flagsAllowed = mineNumber;
 
-    while(m < mineNumber) {
-        int x = Random::Int(0,_rows -1);
-        int y = Random::Int(0, _columns -1);
+    while (m < mineNumber) {
+        int x = Random::Int(0, _rows - 1);
+        int y = Random::Int(0, _columns - 1);
 
         if (_layoutPlan[x][y] == ' ') {
             _layoutPlan[x][y] = 'x';
@@ -78,9 +78,9 @@ void Board::PlantRandMines(unsigned int mineNumber) {
 }
 void Board::PlantMines() {
     for (unsigned int x = 0; x < _rows; x++) {
-        for (int y = 0;y < _columns;y++) {
+        for (int y = 0; y < _columns; y++) {
             if (_layoutPlan[x][y] == 'x') {
-                _mines +=1;
+                _mines += 1;
                 _board[x][y].SetMine();
                 _tilesEligible--;
             }
@@ -92,8 +92,8 @@ void Board::PlantMines() {
 }
 
 bool Board::IsMine(int x, int y) {
-    if (x<0) return false;
-    if (y<0) return false;
+    if (x < 0) return false;
+    if (y < 0) return false;
     if (x >= _rows) return false;
     if (y >= _columns) return false;
 
@@ -104,26 +104,26 @@ int Board::CountNearMines(int x, int y) {
     int mines = 0;
 
     //previous row
-    if (IsMine(x-1,y-1)) mines++;
-    if (IsMine(x-1,y)) mines++;
-    if (IsMine(x-1,y+1)) mines++;
+    if (IsMine(x - 1, y - 1)) mines++;
+    if (IsMine(x - 1, y)) mines++;
+    if (IsMine(x - 1, y + 1)) mines++;
 
     //same row
-    if (IsMine(x,y-1)) mines++;
-    if (IsMine(x,y+1)) mines++;
+    if (IsMine(x, y - 1)) mines++;
+    if (IsMine(x, y + 1)) mines++;
 
     //next row
-    if (IsMine(x+1,y-1)) mines++;
-    if (IsMine(x+1,y)) mines++;
-    if (IsMine(x+1,y+1)) mines++;
+    if (IsMine(x + 1, y - 1)) mines++;
+    if (IsMine(x + 1, y)) mines++;
+    if (IsMine(x + 1, y + 1)) mines++;
 
     return mines;
 }
 void Board::SetNumbers() {
     for (int x = 0; x < _rows; x++) {
         for (int y = 0; y < _columns; y++) {
-            int nearMines = CountNearMines(x,y);
-            if (nearMines>0 && _layoutPlan[x][y] == ' ') {
+            int nearMines = CountNearMines(x, y);
+            if (nearMines > 0 && _layoutPlan[x][y] == ' ') {
                 _layoutPlan[x][y] = '0' + nearMines;
                 _board[x][y].SetNumber(nearMines);
             }
@@ -142,7 +142,7 @@ void Board::RevealMines() {
 }
 void Board::LeftMousePress(int x, int y) {
     for (unsigned int i = 0; i < _rows; i++) {
-        for (int j = 0; j < _columns; j++){
+        for (int j = 0; j < _columns; j++) {
             if (_board[i][j].Contains(x, y)) {
                 if (_hasLost) break;
                 if (_hasWon) break;
@@ -172,19 +172,17 @@ void Board::LeftMousePress(int x, int y) {
 }
 bool Board::RightMousePress(int x, int y) {
     for (unsigned int i = 0; i < _rows; i++) {
-        for (int j = 0; j < _columns; j++){
+        for (int j = 0; j < _columns; j++) {
             if (_hasLost || _hasWon)break;
             if (_board[i][j].ContainsFlag(x, y)) {
                 if (_board[i][j].isRevealed()) break;
                 _board[i][j].Flag();
                 _board[i][j].GetFlagSprite();
 
-                if (_board[i][j].isFlagged()&& !_board[i][j].isRevealed()) {
-                    _flagsAllowed -=1;
-                }
-                else if (!_board[i][j].isFlagged()&& !_board[i][j].isRevealed()) {
-                    _flagsAllowed+=1;
-
+                if (_board[i][j].isFlagged() && !_board[i][j].isRevealed()) {
+                    _flagsAllowed -= 1;
+                } else if (!_board[i][j].isFlagged() && !_board[i][j].isRevealed()) {
+                    _flagsAllowed += 1;
                 }
                 if (_layoutPlan[i][j] == 'x') {
                     if (_board[i][j].isFlagged())_flagMineCount++;
@@ -210,7 +208,7 @@ bool Board::CheckWinStat() {
 void Board::SetDebugStatus() {
     _debugStatus = !_debugStatus;
 }
-void Board::SetTileLayout(vector<vector<char>>& layoutSet) {
+void Board::SetTileLayout(vector<vector<char> > &layoutSet) {
     _mines = 0;
     _layoutPlan = layoutSet;
 }
@@ -220,39 +218,39 @@ void Board::SetDigits(float x, float y) {
     int onesPlace = _flagsAllowed % 10;
     if (_flagsAllowed < 0 && _flagsAllowed > -10) {
         onesPlace = _flagsAllowed * -1;
-    }else if (_flagsAllowed <=-10) {
+    } else if (_flagsAllowed <= -10) {
         tensPlace = -_flagsAllowed / 10;
         onesPlace = -_flagsAllowed % 10;
     }
 
-    if (hundredsPlace> 0) {
-        _hundredsDigit.setTextureRect(sf::IntRect(hundredsPlace*21, 0, 21, 32));
+    if (hundredsPlace > 0) {
+        _hundredsDigit.setTextureRect(sf::IntRect(hundredsPlace * 21, 0, 21, 32));
         tensPlace = hundredsPlace / 10;
-    }else if (_flagsAllowed < 0) {
-        _hundredsDigit.setTextureRect(sf::IntRect(10*21, 0, 21, 32));
-    }else {
-        _hundredsDigit.setTextureRect(sf::IntRect(0*21, 0, 21, 32));
+    } else if (_flagsAllowed < 0) {
+        _hundredsDigit.setTextureRect(sf::IntRect(10 * 21, 0, 21, 32));
+    } else {
+        _hundredsDigit.setTextureRect(sf::IntRect(0 * 21, 0, 21, 32));
     }
 
-    _hundredsDigit.setPosition(x,y);
+    _hundredsDigit.setPosition(x, y);
 
-    _tensDigit.setTextureRect(sf::IntRect(tensPlace*21, 0, 21, 32));
-    _tensDigit.setPosition(x+21,y);
+    _tensDigit.setTextureRect(sf::IntRect(tensPlace * 21, 0, 21, 32));
+    _tensDigit.setPosition(x + 21, y);
 
-    _onesDigit.setTextureRect(sf::IntRect(onesPlace*21, 0, 21, 32));
-    _onesDigit.setPosition(x+42,y);
+    _onesDigit.setTextureRect(sf::IntRect(onesPlace * 21, 0, 21, 32));
+    _onesDigit.setPosition(x + 42, y);
 }
 void Board::SetWin() {
     _hasWon = true;
 }
 
-vector<vector<char>>& Board::GetLayout() {
+vector<vector<char> > &Board::GetLayout() {
     return _layoutPlan;
 }
-vector<vector<Tile>>& Board::GetTileLayout() {
+vector<vector<Tile> > &Board::GetTileLayout() {
     return _board;
 }
-vector<vector<Tile>> & Board::GetTileBoard() {
+vector<vector<Tile> > &Board::GetTileBoard() {
     return _board;
 }
 unsigned int Board::GetMines() {
@@ -270,32 +268,26 @@ int Board::GetFlagsAllowed() {
 bool Board::GetDebugStatus() {
     return _debugStatus;
 }
-
 bool Board::HasLost() {
     return _hasLost;
 }
-
 bool Board::HasWon() {
     return _hasWon;
 }
-
 int Board::FlagMineCount() {
     return _flagMineCount;
 }
-
 int Board::TilesRevealed() {
     return _tilesRevealed;
 }
-
 int Board::TilesEligible() {
     return _tilesEligible;
 }
-
 void Board::PrintLayoutPlan() {
     for (int i = 0; i < _rows; i++) {
         cout << "[ ";
         for (int j = 0; j < _columns; j++) {
-            cout << " "<< _layoutPlan[i][j] <<" ";
+            cout << " " << _layoutPlan[i][j] << " ";
         }
         cout << " ]\n";
     }
