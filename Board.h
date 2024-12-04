@@ -17,7 +17,6 @@ class Board {
 
     bool _hasLost = false;
     bool _hasWon = false;
-    // bool _newGame = true;
 
 
 

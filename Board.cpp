@@ -163,19 +163,11 @@ void Board::LeftMousePress(int x, int y) {
                     _board[i][j].Reveal();
                     _tilesRevealed = 0;
                     CheckWinStat();
-                    cout<< "tiles revealed: "<< _tilesRevealed << endl;
+                    // cout<< "tiles revealed: "<< _tilesRevealed << endl;
                 }
-                // else if (!_board[i][j].HasNumber()) {
-                //     _board[i][j].RevealEligibleNeighbors();
-                // }
-                //
-                // _board[i][j].Reveal();
-
-                // CheckWinStat();
-
                 break;
             }
-    }
+        }
     }
 }
 bool Board::RightMousePress(int x, int y) {
@@ -197,23 +189,21 @@ bool Board::RightMousePress(int x, int y) {
                 if (_layoutPlan[i][j] == 'x') {
                     if (_board[i][j].isFlagged())_flagMineCount++;
                     else if (!_board[i][j].isFlagged()) _flagMineCount--;
-                    cout << "FlagMineCount: "<<_flagMineCount << endl;
-                    cout << "Mines: "<<_mines << endl;
+                    // cout << "FlagMineCount: "<<_flagMineCount << endl;
+                    // cout << "Mines: "<<_mines << endl;
                 }
                 return true;
                 break;
             }
+        }
     }
 }
-}
 bool Board::CheckWinStat() {
-    // if (_flagsAllowed == _mines) {
-        for (unsigned int i = 0; i < _rows; i++) {
-            for (int j = 0; j < _columns; j++) {
-                if (_board[i][j].isRevealed()) _tilesRevealed++;
-            }
+    for (unsigned int i = 0; i < _rows; i++) {
+        for (int j = 0; j < _columns; j++) {
+            if (_board[i][j].isRevealed()) _tilesRevealed++;
         }
-    // }
+    }
 }
 
 
