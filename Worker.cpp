@@ -102,10 +102,6 @@ namespace Worker {
         }
     }
 
-    // void CheckNieghbor(vector<vector<Tile>> &tileBoard) {
-    //
-    // }
-
 
     vector<vector<char>> ReadInTestLayout(string testPath) {
         ifstream testFile(testPath);
@@ -176,6 +172,10 @@ namespace Worker {
     void DrawLost(Window& window, sf::RenderWindow& rWindow) {
         rWindow.draw(window._lose);
     }
+    void DrawSmile(Window &window, sf::RenderWindow &rWindow) {
+        rWindow.draw(window._happy);
+    }
+
     void DrawDigits(Board& board, sf::RenderWindow& rWindow) {
         board.SetDigits(board._digitsX,board._digitsY);
         rWindow.draw(board._hundredsDigit);
@@ -194,5 +194,15 @@ namespace Worker {
                 }
             }
         }
+    }
+
+    bool CheckWin(Board& board) {
+        int tR = board.TilesRevealed();
+        int fMc = board.FlagMineCount();
+        if (fMc == board.GetMines() && tR == board.TilesEligible()) {
+            board.SetWin();
+            return true;
+        }
+        return false;
     }
 }

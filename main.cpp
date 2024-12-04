@@ -58,6 +58,7 @@ int main() {
 
         BuildBoard(board,window);
         DrawDigits(board,window);
+        CheckWin(board);
 
         if (board.GetDebugStatus()) {
             DebugToggle(board.GetTileLayout(),window);
@@ -68,6 +69,9 @@ int main() {
         }
         else if (board.HasLost()) {
             DrawLost(gameWindow,window);
+        }
+        else {
+            DrawMenu(gameWindow,window);
         }
         window.display();
     }

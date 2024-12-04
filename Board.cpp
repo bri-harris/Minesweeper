@@ -39,9 +39,13 @@ void Board::ResizeTileVector() {
 }
 void Board::ResetBoard() {
     _hasLost = false;
+    _hasWon = false;
+    _flagMineCount = 0;
+    _tilesRevealed = 0;
     if (_debugStatus) SetDebugStatus();
     _mines = 0;
     _flagsAllowed = 0;
+    _tilesEligible = _columns * _rows;
     SeedVectorDefaults();
 }
 void Board::SeedVectorDefaults() {
@@ -65,6 +69,7 @@ void Board::PlantRandMines(unsigned int mineNumber) {
             _layoutPlan[x][y] = 'x';
             _board[x][y].SetMine();
             m++;
+            _tilesEligible--;
         }
     }
     SetNumbers();
@@ -77,6 +82,7 @@ void Board::PlantMines() {
             if (_layoutPlan[x][y] == 'x') {
                 _mines +=1;
                 _board[x][y].SetMine();
+                _tilesEligible--;
             }
         }
     }
@@ -135,30 +141,38 @@ void Board::RevealMines() {
     }
 }
 void Board::LeftMousePress(int x, int y) {
-
     for (unsigned int i = 0; i < _rows; i++) {
         for (int j = 0; j < _columns; j++){
             if (_board[i][j].Contains(x, y)) {
                 if (_hasLost) break;
-                else if (_hasWon) break;
+                if (_hasWon) break;
 
                 if (_board[i][j].HasMine()) {
                     _hasLost = true;
                     _board[i][j].Reveal();
                     SetDebugStatus();
-
                     for (unsigned int k = 0; k < _mines; k++) {
-
                         RevealMines();
                     }
                 }
-                else if (!_board[i][j].HasNumber()) {
-                    // cout << "Number of Nieghbors: " << _board[i][j].GetNumNeighbors() << endl;
-                    _board[i][j].RevealEligibleNeighbors();
+                if (!_board[i][j].isRevealed()) {
+                    if (!_board[i][j].HasNumber()) {
+                        _board[i][j].RevealEligibleNeighbors();
+                    }
 
+                    _board[i][j].Reveal();
+                    _tilesRevealed = 0;
+                    CheckWinStat();
+                    cout<< "tiles revealed: "<< _tilesRevealed << endl;
                 }
+                // else if (!_board[i][j].HasNumber()) {
+                //     _board[i][j].RevealEligibleNeighbors();
+                // }
+                //
+                // _board[i][j].Reveal();
 
-                _board[i][j].Reveal();
+                // CheckWinStat();
+
                 break;
             }
     }
@@ -178,12 +192,28 @@ bool Board::RightMousePress(int x, int y) {
                 }
                 else if (!_board[i][j].isFlagged()&& !_board[i][j].isRevealed()) {
                     _flagsAllowed+=1;
+
+                }
+                if (_layoutPlan[i][j] == 'x') {
+                    if (_board[i][j].isFlagged())_flagMineCount++;
+                    else if (!_board[i][j].isFlagged()) _flagMineCount--;
+                    cout << "FlagMineCount: "<<_flagMineCount << endl;
+                    cout << "Mines: "<<_mines << endl;
                 }
                 return true;
                 break;
             }
     }
 }
+}
+bool Board::CheckWinStat() {
+    // if (_flagsAllowed == _mines) {
+        for (unsigned int i = 0; i < _rows; i++) {
+            for (int j = 0; j < _columns; j++) {
+                if (_board[i][j].isRevealed()) _tilesRevealed++;
+            }
+        }
+    // }
 }
 
 
@@ -214,12 +244,6 @@ void Board::SetDigits(float x, float y) {
         _hundredsDigit.setTextureRect(sf::IntRect(0*21, 0, 21, 32));
     }
 
-    // cout << "Hundreds Place: " << hundredsPlace << endl;
-    // cout << "Tens Place: " << tensPlace << endl;
-    // cout << "Ones Place: " << onesPlace << endl;
-    // cout << "Flags Allowed: " << _flagsAllowed << endl;
-    // cout << "Mines: " << _mines << endl;
-
     _hundredsDigit.setPosition(x,y);
 
     _tensDigit.setTextureRect(sf::IntRect(tensPlace*21, 0, 21, 32));
@@ -227,6 +251,9 @@ void Board::SetDigits(float x, float y) {
 
     _onesDigit.setTextureRect(sf::IntRect(onesPlace*21, 0, 21, 32));
     _onesDigit.setPosition(x+42,y);
+}
+void Board::SetWin() {
+    _hasWon = true;
 }
 
 vector<vector<char>>& Board::GetLayout() {
@@ -260,6 +287,18 @@ bool Board::HasLost() {
 
 bool Board::HasWon() {
     return _hasWon;
+}
+
+int Board::FlagMineCount() {
+    return _flagMineCount;
+}
+
+int Board::TilesRevealed() {
+    return _tilesRevealed;
+}
+
+int Board::TilesEligible() {
+    return _tilesEligible;
 }
 
 void Board::PrintLayoutPlan() {

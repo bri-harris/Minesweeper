@@ -11,8 +11,13 @@ class Board {
     bool _debugStatus = false;
     int _flagsAllowed;
 
+    int _tilesEligible = 0;
+    int _flagMineCount = 0;
+    int _tilesRevealed = 0;
+
     bool _hasLost = false;
     bool _hasWon = false;
+    // bool _newGame = true;
 
 
 
@@ -36,10 +41,12 @@ public:
     void RevealMines();
     void LeftMousePress(int x, int y);
     bool RightMousePress(int x, int y);
+    bool CheckWinStat();
 
     void SetDebugStatus();
     void SetTileLayout(vector<vector<char>>& layoutSet);
     void SetDigits(float x, float y);
+    void SetWin();
 
     vector<vector<char>>& GetLayout();
     vector<vector<Tile>>& GetTileLayout();
@@ -51,6 +58,9 @@ public:
     bool GetDebugStatus();
     bool HasLost();
     bool HasWon();
+    int FlagMineCount();
+    int TilesRevealed();
+    int TilesEligible();
 
     void PrintLayoutPlan();
 };
