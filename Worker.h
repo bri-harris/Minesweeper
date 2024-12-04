@@ -10,6 +10,7 @@ namespace Worker {
     unsigned int GetMineNumFromConfig(string cfgFile);
 
     void SetNieghtbors(vector<vector<Tile>>& tileBoard);
+    // void CheckNieghbor(vector<vector<Tile>>& tileBoard);
 
     vector<vector<char>> ReadInTestLayout(string testFile);
     void SetupTestBoard(Board& board, string testPath);

@@ -50,6 +50,7 @@ namespace Worker {
                     }
                 }
 
+
                 else if (x == rows -1) {
                     if (y == 0) {
                         tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y]);
@@ -69,6 +70,7 @@ namespace Worker {
                         tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y+1]);
                     }
                 }
+
 
                 else if (y == 0) {
                         tileBoard[x][y].SetAdjacent(&tileBoard[x-1][y]);
@@ -99,6 +101,11 @@ namespace Worker {
             }
         }
     }
+
+    // void CheckNieghbor(vector<vector<Tile>> &tileBoard) {
+    //
+    // }
+
 
     vector<vector<char>> ReadInTestLayout(string testPath) {
         ifstream testFile(testPath);
@@ -169,7 +176,6 @@ namespace Worker {
     void DrawLost(Window& window, sf::RenderWindow& rWindow) {
         rWindow.draw(window._lose);
     }
-
     void DrawDigits(Board& board, sf::RenderWindow& rWindow) {
         board.SetDigits(board._digitsX,board._digitsY);
         rWindow.draw(board._hundredsDigit);

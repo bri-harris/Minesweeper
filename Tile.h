@@ -19,23 +19,22 @@ public:
     sf::Sprite& GetTileSprite();
     sf::Sprite& GetMineSprite();
     sf::Sprite& GetFlagSprite();
-    void SetMine();
-
-    void SetAdjacent(Tile* tile);
-
     sf::Sprite& GetNumberSprite();
-    void SetNumber(int number);
 
     bool HasNumber();
     bool HasMine();
     bool isRevealed();
     bool isFlagged();
-
     bool Contains(float x, float y);
     bool ContainsFlag(float x, float y);
 
+    void SetMine();
+    void SetNumber(int number);
     void SetPosition(float x, float y);
-
     void Flag();
     void Reveal();
+
+    void SetAdjacent(Tile* tile);
+    int GetNumNeighbors();
+    void RevealEligibleNeighbors();
 };

@@ -152,9 +152,11 @@ void Board::LeftMousePress(int x, int y) {
                         RevealMines();
                     }
                 }
-                // else if (!_board[i][j].HasNumber()) {
-                //
-                // }
+                else if (!_board[i][j].HasNumber()) {
+                    // cout << "Number of Nieghbors: " << _board[i][j].GetNumNeighbors() << endl;
+                    _board[i][j].RevealEligibleNeighbors();
+
+                }
 
                 _board[i][j].Reveal();
                 break;
@@ -167,6 +169,7 @@ bool Board::RightMousePress(int x, int y) {
         for (int j = 0; j < _columns; j++){
             if (_hasLost || _hasWon)break;
             if (_board[i][j].ContainsFlag(x, y)) {
+                if (_board[i][j].isRevealed()) break;
                 _board[i][j].Flag();
                 _board[i][j].GetFlagSprite();
 
@@ -176,7 +179,6 @@ bool Board::RightMousePress(int x, int y) {
                 else if (!_board[i][j].isFlagged()&& !_board[i][j].isRevealed()) {
                     _flagsAllowed+=1;
                 }
-                cout<<"Flags Allowed: " << _flagsAllowed << endl;
                 return true;
                 break;
             }
